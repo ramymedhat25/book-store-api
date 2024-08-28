@@ -39,3 +39,11 @@ app.get("/books/author/:author", (req, res) => {
   const authorBooks = books.filter((book) => book.author === author);
   res.json(authorBooks);
 });
+
+// Task 4: Get all books based on Title
+app.get("/books/title/:title", (req, res) => {
+  const title = req.params.title;
+  const titleBooks = books.filter((book) => book.title.includes(title));
+  res.json(titleBooks);
+});
+
