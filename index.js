@@ -46,4 +46,20 @@ app.get("/books/title/:title", (req, res) => {
   const titleBooks = books.filter((book) => book.title.includes(title));
   res.json(titleBooks);
 });
+// Task 5: Get book Review
+app.get("/books/:bookId/reviews", (req, res) => {
+  const bookId = parseInt(req.params.bookId);
+  const bookReviews = reviews.filter((review) => review.bookId === bookId);
+  res.json(bookReviews);
+});
 
+// Task 6: Register New user
+app.post("/users/register", (req, res) => {
+  const userData = req.body;
+  res.json({ message: "User registered successfully", user: userData });
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
