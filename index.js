@@ -71,7 +71,7 @@ app.post("/users/login", (req, res) => {
 
 // Task 8: Add/Modify a book review
 app.put("/reviews", (req, res) => {
-  // const reviewData = req.body;
+  const reviewData = req.body;
   res.json({
     message: "Review added/modified successfully",
   });
