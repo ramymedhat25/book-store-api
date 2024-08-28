@@ -59,7 +59,124 @@ app.post("/users/register", (req, res) => {
   res.json({ message: "User registered successfully", user: userData });
 });
 
+// Task 7: Login as a Registered user
+app.post("/users/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "user" && password === "password") {
+    res.json({ message: "Login successful" });
+  } else {
+    res.status(401).json({ error: "Login failed" });
+  }
+});
+
+// Task 8: Add/Modify a book review
+app.put("/reviews", (req, res) => {
+  // const reviewData = req.body;
+  res.json({
+    message: "Review added/modified successfully",
+  });
+});
+
+// Task 9: Delete book review added by that particular user
+app.delete("/reviews/:reviewId", (req, res) => {
+  const reviewId = parseInt(req.params.reviewId);
+  res.json({ message: "Review deleted successfully", reviewId });
+});
+
+// Task 10: Get all books (async callback function)
+app.get("/async/books", async (req, res) => {
+  try {
+    const asyncBooks = await fetchBooksAsync();
+    res.json(asyncBooks);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Task 11: Search by ISBN (Using Promises)
+app.get("/promise/books/isbn/:isbn", (req, res) => {
+  const isbn = req.params.isbn;
+  searchBooksByISBN(isbn)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(404).json({ error: "Book not found" });
+    });
+});
+
+// Task 12: Search by Author
+app.get("/promise/books/author/:author", (req, res) => {
+  const author = req.params.author;
+  searchBooksByAuthor(author)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(404).json({ error: "No books found for this author" });
+    });
+});
+
+// Task 13: Search by Title
+app.get("/promise/books/title/:title", (req, res) => {
+  const title = req.params.title;
+  searchBooksByTitle(title)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(404).json({ error: "No books found with this title" });
+    });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+function fetchBooksAsync() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(books);
+    }, 1000);
+  });
+}
+
+function searchBooksByISBN(isbn) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const book = books.find((book) => book.ISBN === isbn);
+      if (book) {
+        resolve(book);
+      } else {
+        reject("Book not found");
+      }
+    }, 1000);
+  });
+}
+
+function searchBooksByAuthor(author) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const authorBooks = books.filter((book) => book.author === author);
+      if (authorBooks.length > 0) {
+        resolve(authorBooks);
+      } else {
+        reject("No books found for this author");
+      }
+    }, 1000);
+  });
+}
+
+function searchBooksByTitle(title) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const titleBooks = books.filter((book) => book.title.includes(title));
+      if (titleBooks.length > 0) {
+        resolve(titleBooks);
+      } else {
+        reject("No books found with this title");
+      }
+    }, 1000);
+  });
+}
